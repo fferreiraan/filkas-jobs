@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import filedialog
 from typing import Union
 import traceback
+import requests
 
 def select_file_deployment():
     root = tk.Tk()
