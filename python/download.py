@@ -1,42 +1,32 @@
-import urllib.request
 import os
+import subprocess
+import urllib.request
+import shutil
 
-def download_chrome():
-    # URL of the Google Chrome RPM file for Fedora
+def download_and_install_chrome():
+    # URL do arquivo RPM do Google Chrome para Linux
     chrome_rpm_url = 'https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm'
 
-    # Destination directory where the RPM file will be saved (current directory)
-    destination_directory = os.path.dirname(os.path.abspath(__file__))
-
-    # Full path to the destination RPM file to be downloaded
-    destination_path = os.path.join(destination_directory, 'google-chrome.rpm')
+    # Nome do arquivo RPM a ser baixado
+    rpm_filename = 'google-chrome.rpm'
 
     try:
-        # Download the Google Chrome RPM file
-        print(f"Downloading Google Chrome to {destination_path}...")
-        urllib.request.urlretrieve(chrome_rpm_url, destination_path)
-        print("Download completed.")
+        # Baixar o arquivo RPM do Google Chrome
+        print(f"Baixando Google Chrome de: {chrome_rpm_url}")
+        urllib.request.urlretrieve(chrome_rpm_url, rpm_filename)
+        print("Download concluído.")
 
-        return destination_path  # Return the full path of the downloaded file
+        # Extrair o conteúdo do RPM para o diretório atual
+        print("Instalando Google Chrome localmente...")
+        subprocess.run(['rpm2cpio', rpm_filename], check=True, stdout=subprocess.PIPE)
+        subprocess.run(['cpio', '-idmv'], check=True, stdin=open('google-chrome.rpm', 'rb'))
+
+        # Limpar arquivo RPM após a instalação
+        os.remove(rpm_filename)
+
+        print("Google Chrome foi instalado com sucesso localmente.")
     except Exception as e:
-        print(f"Error downloading Google Chrome: {e}")
-        return None
-
-# Main function to download and install Google Chrome
-def main():
-    # Perform the download of Google Chrome
-    rpm_file = download_chrome()
-
-    if rpm_file:
-        # Install Google Chrome using dnf package manager (replace with your package manager if different)
-        try:
-            print("Installing Google Chrome...")
-            os.system(f"sudo dnf install -y {rpm_file}")
-            print("Google Chrome installed successfully.")
-        except Exception as e:
-            print(f"Error installing Google Chrome: {e}")
-    else:
-        print("Failed to download Google Chrome. Check logs for details.")
+        print(f"Erro durante o processo de instalação do Google Chrome: {e}")
 
 if __name__ == "__main__":
-    main()
+    download_and_install_chrome()
