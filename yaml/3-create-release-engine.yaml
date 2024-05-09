@@ -1,0 +1,35 @@
+name: 3 - [ENGINE] Create Release-Engine Branch
+
+on:
+  workflow_dispatch:  
+  pull-re
+
+jobs:
+  #criar tag de versão
+  create_release_branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: Determine next release-engine version
+        id: next_version
+        run: |
+          last_release=$(git branch --list "release-engine-*" --sort=-version:refname | head -n 1)
+          if [ -z "$last_release" ]; then
+            echo "::set-output name=next_version::0.1.0"
+          else
+            last_version=$(echo "$last_release" | sed 's/^release-engine-//')
+            IFS='.' read -r major minor patch <<< "$last_version"
+            next_patch=$((patch + 1))
+            echo "::set-output name=next_version::$major.$minor.$next_patch"
+          fi
+
+      - name: Create release-engine branch
+        run: |
+          next_version=${{ steps.next_version.outputs.next_version }}
+          new_branch="release-engine-$next_version"
+          git checkout -b "$new_branch"
+          git push origin "$new_branch"
+          echo "New release-engine branch created: $new_branch"
