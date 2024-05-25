@@ -1,34 +1,10 @@
 import inspect
 import traceback
 
-FIELDS_EXECUTION_RITM = [
-    'description',
-    'origem',
-    'ip_router'
-]
-
-
-
-def prepare_input(inputs: dict):
-    inputs_valid = dict(filter(lambda it: it[1] is not None, inputs.items()))
-    
-    inputs_names = inputs_valid.keys()
-
-    return inputs_valid
-
-teste = {
-    'a':'b',
-    'x':None,
-    'j':231,
-    'd':None
-}
-
-prepare_input(teste)
-
 def get_all_inputs(params_search: list[str]):
     try:
 
-        module_automation = inspect.getmodule(inspect.stack()[1])
+        module_automation = inspect.getmodule(inspect.stack()[1][0])
         inputs = {}
         
         for param_search in params_search:
