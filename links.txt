@@ -2,3 +2,6 @@ https://youtube.com/playlist?list=PLrDO077pPi7tI__gYdlNVkqlPN8tuM1Yl&si=gDHgedsh
 
 
 https://marketplace.visualstudio.com/_apis/public/gallery/publishers/vscjava/vsextensions/vscode-java-pack/0.30.2026052200/vspackage
+
+
+https://marketplace.visualstudio.com/_apis/public/gallery/publishers/redhat/vsextensions/java/latest/vspackage
